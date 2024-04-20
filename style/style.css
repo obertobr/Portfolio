@@ -3,6 +3,7 @@
 :root {
     --main-color: #222831;
     --second-color: #31363F;
+    --third-color: #535b69;
     --white-color: #EEEEEE;
 
     --detail-color: #0B60B0;
@@ -87,4 +88,63 @@ header > a:visited {
 #home > div > img {
     width: 30vw;
     border-radius: 100%;
+}
+
+.topics {
+    margin: 20px;
+    margin-bottom: 100px;
+}
+
+#aboutme > p {
+    margin: 0px 10px 0px 10px;
+}
+
+.subheading {
+    font-size: 2em;
+    font-weight: 500;
+    margin: 0px 0px 0px 10px;
+}
+#aboutme > p:nth-child(3) {
+    font-size: 1.2em;
+    text-align: justify;
+}
+
+hr {
+    border-color: var(--third-color);
+    border-style: solid;
+}
+
+#skills > div {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-left: 20px;
+}
+
+.skill{
+    position: relative;
+    background-color: var(--detail-color);
+}
+
+.skill > img {
+    width: 90px;
+    height: 90px;
+    transition: all 0.1s ease-out;
+}
+
+.skill > p {
+    position: absolute;
+    filter: opacity(0%);
+    margin: 0px;
+    left: 3px;
+    top: 2px;
+    transition: all 0.1s ease-out;
+}
+
+.skill:hover > img{
+    filter: brightness(25%);
+}
+
+.skill:hover > p{
+    filter: opacity(100%);
 }
