@@ -29,6 +29,14 @@ body::-webkit-scrollbar-thumb {
     background-color: var(--detail-color);
 }
 
+a:link {
+    color: var(--white-color);
+}
+
+a:visited {
+    color: var(--white-color);
+}
+
 header{
     position: fixed;
     display: flex;
@@ -37,15 +45,11 @@ header{
     top: 20px;
     border-radius: 20px;
     padding: 0px 20px 0px 20px;
+    z-index: 1;
 }
 header > a {
     margin: 10px;
     text-decoration: none;
-    color: var(--white-color);
-}
-
-header > a:visited {
-    color: var(--white-color);
 }
 
 #home {
@@ -147,4 +151,52 @@ hr {
 
 .skill:hover > p{
     filter: opacity(100%);
+}
+
+#projects > a {
+    float: right;
+    margin-top: 20px;
+}
+
+#projects > div {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    margin: 20px;
+}
+
+.project {
+    position: relative;
+    background-color: var(--detail-color);
+}
+
+.project > img{
+    width: 40vw;
+    height: 27vw;
+    object-fit: cover;
+    filter: brightness(25%);
+    transition: all 0.3s ease-out;
+}
+
+.project > p {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%,-50%);
+    font-size: 2em;
+    font-weight: 600;
+    text-wrap: nowrap;
+    transition: all 0.3s ease-out;
+}
+
+.project:hover {
+    cursor: pointer;
+}
+
+.project:hover > img {
+    filter: brightness(100%);
+}
+
+.project:hover > p {
+    filter: opacity(0%);
 }
