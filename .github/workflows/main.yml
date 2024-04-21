@@ -1,0 +1,17 @@
+on: push
+name: 🚀 Deploya site quando puxar
+jobs:
+  web-deploy:
+    name: 🎉 Deployado
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Pegando codigo novo
+      uses: actions/checkout@v4
+    
+    - name: 📂 Syncando arquivos
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: 104.196.4.245
+        username: ftpuser
+        password: ${{ secrets.ftp_password }}
+        server-dir: html/
