@@ -200,3 +200,41 @@ hr {
 .project:hover > p {
     filter: opacity(0%);
 }
+
+#contacts > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: left;
+    margin: 20px;
+}
+
+#contacts img {
+    background-color: var(--second-color);
+    width: 70px;
+    border: 10px solid var(--second-color);
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+#contacts a {
+    flex-basis: calc(50% - 10px);
+    min-width: 310px;
+    text-decoration: none;
+    transition: all 0.1s ease-out;
+}
+
+#contacts a:hover {
+    background-color: #31363F;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#contacts table p {
+    margin: 0px;
+    font-size: 1.3em;
+}
+
+#contacts table td > p:nth-child(2) {
+    color: var(--third-color);
+}
