@@ -161,6 +161,7 @@ hr {
 #projects > div {
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
     gap: 10px;
     margin: 20px;
 }
@@ -172,7 +173,8 @@ hr {
 
 .project > img{
     width: 40vw;
-    height: 27vw;
+    aspect-ratio: 40/24;
+    min-width: 410px;
     object-fit: cover;
     filter: brightness(25%);
     transition: all 0.3s ease-out;
