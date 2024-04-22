@@ -9,6 +9,10 @@
     --detail-color: #0B60B0;
   }
 
+html{
+    scroll-behavior:smooth
+}
+
 body {
     background-color: var(--main-color);
     color: #EEEEEE;
@@ -97,6 +101,14 @@ header > a {
 .topics {
     margin: 20px;
     margin-bottom: 100px;
+}
+
+.topics::before {
+    content: "";
+    display: block;
+    height: 60px;
+    margin-top: -60px;
+    visibility: hidden;
 }
 
 #aboutme > p {
