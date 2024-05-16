@@ -295,6 +295,22 @@ hr {
     display: none;
 }
 
+.allProjects {
+    background-color: var(--second-color);
+    width: 80vw;
+    font-size: 1.3em;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    display: none;
+    padding: 20px 0px 20px 0px;
+}
+
+.allProjects:hover {
+    cursor: pointer;
+    filter: brightness(120%);
+}
+
 
 @media (orientation: portrait) {
     header {
@@ -306,6 +322,46 @@ hr {
     }
 
     header:not(.menuOn) > #menu {
+        display: block;
+    }
+
+    #home {
+        flex-direction: column-reverse;
+        height: auto;
+        gap:  30px;
+        margin: 50px;
+    }
+
+    #home > div > img {
+        width: 80%;
+    }
+
+    #infos > p {
+        line-height: 9vw;
+    }
+
+    #infos > p:nth-child(1){
+        font-size: 15vw;
+    }
+    #infos > p:nth-child(2){
+        font-size: 6.2vw;
+    }
+
+    .project > img{
+        width: 80vw;
+        min-width: 0;
+    }
+
+    .project > p {
+        font-size: 6vw;
+        font-weight: 600;
+    }
+
+    #projects > a {
+        display: none;
+    }
+    
+    .allProjects {
         display: block;
     }
 }
