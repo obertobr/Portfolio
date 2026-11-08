@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build Output
+dist/
+.astro/
+
+# Brainstorming Drafts & Exploration
+rascunhos/
+rascunhos_10_designs.html
+
+# Environment / Logs
+.env
+.env.*
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
