@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Marginalia from '../components/Marginalia.astro';
+import Header from '../components/Header.astro';
+import CareerSection from '../components/CareerSection.astro';
+import LanguagesSection from '../components/LanguagesSection.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
+import SkillsSection from '../components/SkillsSection.astro';
+---
+
+<Layout title="Rafael Eduardo Azzi Lopes (@obertobr) — Engenheiro de Software">
+  <div class="document-layout">
+    <Marginalia photoSrc="/imgs/HD.png" />
+
+    <main class="document-body">
+      <Header />
+
+      <section>
+        <div class="section-title">
+          <span>1.0 Introdução</span>
+        </div>
+        <p>
+          Olá! Sou Rafael, também conhecido como obertobr na internet, desenvolvedor de software apaixonado por tecnologia e pela criação de soluções.
+        </p>
+        <p>
+          Minha jornada na programação começou aos 10 anos, por influência do meu pai. Desde então, venho explorando diferentes linguagens, ferramentas e áreas da tecnologia, acumulando experiências tanto no desenvolvimento de aplicações web quanto de sistemas desktop.
+        </p>
+        <p>
+          Ao longo da minha trajetória profissional, trabalhei na manutenção e evolução de sistemas ERP, desenvolvimento de aplicações personalizadas para empresas e construção de projetos do zero, participando desde a definição da arquitetura até a implementação e implantação das soluções. Também tive experiências com desenvolvimento de interfaces modernas e responsivas, integração entre sistemas, automação de processos e bancos de dados relacionais.
+        </p>
+        <p>
+          Já trabalhei com diversas tecnologias, incluindo Python, PHP, Delphi e Lazarus. Atualmente, também trabalho com JavaScript e TypeScript, utilizando ferramentas e frameworks como React, Vite e Node.js no desenvolvimento de aplicações web.
+        </p>
+        <p style="color:var(--muted);">
+          Além das experiências profissionais, desenvolvo projetos pessoais e open source, explorando novas tecnologias e colocando ideias em prática.
+        </p>
+      </section>
+
+      <CareerSection />
+
+      <LanguagesSection />
+
+      <SkillsSection />
+
+      <ProjectsSection />
+
+      <div class="action-links-bar">
+        <div>
+          <button class="doc-btn" onclick="window.print()">Baixar Documento em PDF</button>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+</Layout>
+

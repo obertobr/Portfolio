@@ -1,0 +1,20 @@
+[
+  {
+    "period": "2024 — PRESENTE",
+    "role": "Engenheiro de Software & Dados (Freelance)",
+    "organization": "Projetos Autônomos & Contratos",
+    "description": "Engenharia de pipelines distribuídos para extração de dados em larga escala. Desenvolvimento de crawlers headless resilientes com bypass de proteções complexas, normalização relacional e APIs assíncronas em TypeScript e Python."
+  },
+  {
+    "period": "2022 — 2024",
+    "role": "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+    "organization": "FATEC São Paulo",
+    "description": "Formação superior com foco em engenharia de requisitos, modelagem relacional de banco de dados, computação distribuída e desenvolvimento de sistemas em C# e Java."
+  },
+  {
+    "period": "DESDE OS 10 ANOS",
+    "role": "Prática Deliberada & Mentoria Técnica Contínua",
+    "organization": "Formação Autodidata com Mentoria Paterna",
+    "description": "Mais de uma década contínua de programação iniciada aos 10 anos sob influência direta paterna. Desenvolvimento de algoritmos, automações, microsserviços e sistemas desktop/web em múltiplas linguagens."
+  }
+]

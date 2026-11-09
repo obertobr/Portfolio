@@ -1,0 +1,172 @@
+---
+import projectsData from '../data/projects.json';
+---
+
+<section>
+  <div class="section-title">
+    <span>5.0 Projetos</span>
+    <a href="/projetos" class="section-header-link">Todos projetos ↗</a>
+  </div>
+
+  <div class="projects-grid">
+    {projectsData.featured.map((proj, idx) => (
+      <article class="project-card">
+        <div>
+          <div class="project-card-header">
+            <div class="project-title-wrap">
+              <span class="project-idx">0{idx + 1}</span>
+              <h3 class="project-title">{proj.name}</h3>
+            </div>
+          </div>
+
+          <div class="project-stack-tags">
+            {proj.stack.split(' • ').map((tag) => (
+              <span class="project-tag">{tag}</span>
+            ))}
+          </div>
+
+          <p class="project-desc">{proj.description}</p>
+        </div>
+
+        <div class="project-footer">
+          <a href={proj.url} target="_blank" rel="noopener noreferrer" class="project-github-link">
+            Ver no GitHub ↗
+          </a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .section-header-link {
+    font-size: 11px;
+    font-weight: normal;
+    color: var(--cyan);
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .section-header-link:hover {
+    text-decoration: underline;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin: 16px 0 24px 0;
+  }
+
+  .project-card {
+    background: #101013;
+    border: 1px solid var(--border);
+    border-top: 2px solid #27272a;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .project-card:hover {
+    border-color: var(--cyan);
+    border-top-color: var(--cyan);
+    background: #131317;
+  }
+
+  .project-card-header {
+    margin-bottom: 8px;
+  }
+
+  .project-title-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .project-idx {
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--cyan);
+    font-family: var(--font-mono);
+  }
+
+  .project-title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  .project-stack-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .project-tag {
+    font-size: 10px;
+    color: var(--cyan);
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.18);
+    padding: 1px 6px;
+  }
+
+  .project-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+
+  .project-footer {
+    padding-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .project-github-link {
+    font-size: 11px;
+    color: var(--cyan);
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .project-github-link:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 680px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media print {
+    .section-header-link {
+      display: none !important;
+    }
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+    .project-card {
+      background: #fff !important;
+      border: 1px solid #000 !important;
+    }
+    .project-title,
+    .project-idx,
+    .project-desc,
+    .project-github-link {
+      color: #000 !important;
+    }
+    .project-tag {
+      border: 1px solid #000 !important;
+      color: #000 !important;
+      background: #f0f0f0 !important;
+    }
+  }
+</style>

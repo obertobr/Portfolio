@@ -1,0 +1,38 @@
+[
+  {
+    "name": "JavaScript",
+    "percentage": 44.8,
+    "color": "#facc15",
+    "projects": 17
+  },
+  {
+    "name": "TypeScript",
+    "percentage": 31.7,
+    "color": "#38bdf8",
+    "projects": 5
+  },
+  {
+    "name": "Rust",
+    "percentage": 8.2,
+    "color": "#f97316",
+    "projects": 1
+  },
+  {
+    "name": "Python",
+    "percentage": 6.5,
+    "color": "#10b981",
+    "projects": 5
+  },
+  {
+    "name": "PHP",
+    "percentage": 4.8,
+    "color": "#a855f7",
+    "projects": 8
+  },
+  {
+    "name": "Outros (C#, Java)",
+    "percentage": 4.0,
+    "color": "#64748b",
+    "projects": 4
+  }
+]

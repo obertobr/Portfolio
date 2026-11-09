@@ -1,0 +1,376 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title, 
+  description = "Portfólio de Rafael Eduardo Azzi Lopes (@obertobr) — Engenheiro de Software e Dados." 
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <title>{title}</title>
+  <style is:global>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #141416;
+      --fg: #e2e8f0;
+      --muted: #71717a;
+      --border: #27272a;
+      --cyan: #38bdf8;
+      --blue: #2563eb;
+      --font-mono: "JetBrains Mono", "Consolas", "Courier New", monospace;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.65;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    #life-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .document-layout {
+      max-width: 1040px;
+      margin: 40px auto 80px auto;
+      padding: 0 30px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 50px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .document-body {
+      max-width: 680px;
+    }
+
+    .doc-header-block {
+      border-bottom: 2px solid #fff;
+      padding-bottom: 16px;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .doc-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 36px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    p {
+      margin-bottom: 14px;
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+      font-size: 12px;
+    }
+
+    .spec-table th {
+      border-bottom: 1px solid #fff;
+      text-align: left;
+      padding: 6px 0;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .spec-table td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      vertical-align: top;
+    }
+
+    .action-links-bar {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .doc-btn {
+      background: #fff;
+      color: #000;
+      padding: 6px 16px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 12px;
+      border: none;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .doc-btn:hover {
+      background: var(--cyan);
+      text-decoration: none;
+    }
+
+    @media (max-width: 820px) {
+      .document-layout {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 0 20px;
+        margin: 20px auto;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      #life-canvas {
+        display: none !important;
+      }
+      .document-layout {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .action-links-bar {
+        display: none !important;
+      }
+      a {
+        color: #000 !important;
+        text-decoration: underline !important;
+      }
+      .doc-btn {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="life-canvas" aria-hidden="true"></canvas>
+  <slot />
+
+  <script>
+    const canvas = document.getElementById('life-canvas') as HTMLCanvasElement | null;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        const cellSize = 10;
+        const stepInterval = 130;
+        let cols = 0;
+        let rows = 0;
+        let current = new Uint8Array(0);
+        let next = new Uint8Array(0);
+        let tick = 0;
+        let lastTime = 0;
+
+        function initGrid() {
+          if (!canvas) return;
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          cols = Math.ceil(canvas.width / cellSize);
+          rows = Math.ceil(canvas.height / cellSize);
+          const total = cols * rows;
+          current = new Uint8Array(total);
+          next = new Uint8Array(total);
+
+          for (let i = 0; i < total; i++) {
+            if (Math.random() < 0.12) {
+              current[i] = 1;
+            }
+          }
+        }
+
+        function spawnGlider(x: number, y: number) {
+          const pattern = [
+            [0, 1], [1, 2], [2, 0], [2, 1], [2, 2]
+          ];
+          for (const [dx, dy] of pattern) {
+            const c = (x + dx + cols) % cols;
+            const r = (y + dy + rows) % rows;
+            current[r * cols + c] = 1;
+          }
+        }
+
+        window.addEventListener('resize', initGrid);
+        initGrid();
+
+        window.addEventListener('click', (e) => {
+          const c = Math.floor(e.clientX / cellSize);
+          const r = Math.floor(e.clientY / cellSize);
+          for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+              if (Math.random() < 0.75) {
+                const nc = (c + dc + cols) % cols;
+                const nr = (r + dr + rows) % rows;
+                current[nr * cols + nc] = 1;
+              }
+            }
+          }
+        });
+
+        function step() {
+          let aliveCount = 0;
+          for (let r = 0; r < rows; r++) {
+            const top = (r === 0 ? rows - 1 : r - 1) * cols;
+            const mid = r * cols;
+            const bot = (r === rows - 1 ? 0 : r + 1) * cols;
+
+            for (let c = 0; c < cols; c++) {
+              const left = c === 0 ? cols - 1 : c - 1;
+              const right = c === cols - 1 ? 0 : c + 1;
+
+              const count = (
+                (current[top + left] > 0 ? 1 : 0) +
+                (current[top + c] > 0 ? 1 : 0) +
+                (current[top + right] > 0 ? 1 : 0) +
+                (current[mid + left] > 0 ? 1 : 0) +
+                (current[mid + right] > 0 ? 1 : 0) +
+                (current[bot + left] > 0 ? 1 : 0) +
+                (current[bot + c] > 0 ? 1 : 0) +
+                (current[bot + right] > 0 ? 1 : 0)
+              );
+
+              const idx = mid + c;
+              const state = current[idx];
+
+              if (state > 0) {
+                if (count === 2 || count === 3) {
+                  next[idx] = Math.min(state + 1, 10);
+                  aliveCount++;
+                } else {
+                  next[idx] = 0;
+                }
+              } else {
+                if (count === 3) {
+                  next[idx] = 1;
+                  aliveCount++;
+                } else {
+                  next[idx] = 0;
+                }
+              }
+            }
+          }
+
+          const temp = current;
+          current = next;
+          next = temp;
+
+          if (tick % 60 === 0 || aliveCount < 25) {
+            const rx = Math.floor(Math.random() * cols);
+            const ry = Math.floor(Math.random() * rows);
+            spawnGlider(rx, ry);
+          }
+        }
+
+        function draw() {
+          if (!canvas || !ctx) return;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+
+          for (let r = 0; r < rows; r++) {
+            const rowOffset = r * cols;
+            const y = r * cellSize;
+            const topRow = (r === 0 ? rows - 1 : r - 1) * cols;
+            const botRow = (r === rows - 1 ? 0 : r + 1) * cols;
+
+            for (let c = 0; c < cols; c++) {
+              if (current[rowOffset + c] > 0) {
+                const x = c * cellSize;
+                const left = c === 0 ? cols - 1 : c - 1;
+                const right = c === cols - 1 ? 0 : c + 1;
+
+                if (current[topRow + c] === 0) {
+                  ctx.moveTo(x, y);
+                  ctx.lineTo(x + cellSize, y);
+                }
+                if (current[botRow + c] === 0) {
+                  ctx.moveTo(x, y + cellSize);
+                  ctx.lineTo(x + cellSize, y + cellSize);
+                }
+                if (current[rowOffset + left] === 0) {
+                  ctx.moveTo(x, y);
+                  ctx.lineTo(x, y + cellSize);
+                }
+                if (current[rowOffset + right] === 0) {
+                  ctx.moveTo(x + cellSize, y);
+                  ctx.lineTo(x + cellSize, y + cellSize);
+                }
+              }
+            }
+          }
+          ctx.stroke();
+        }
+
+        function loop(timestamp: number) {
+          requestAnimationFrame(loop);
+          if (timestamp - lastTime < stepInterval) return;
+          lastTime = timestamp;
+          tick++;
+          step();
+          draw();
+        }
+
+        requestAnimationFrame(loop);
+      }
+    }
+  </script>
+</body>
+</html>

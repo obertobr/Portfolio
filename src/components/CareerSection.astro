@@ -1,0 +1,32 @@
+---
+import careerData from '../data/career.json';
+---
+
+<section>
+  <div class="section-title">
+    <span>2.0 Histórico de Atuação Profissional</span>
+  </div>
+
+  <table class="spec-table">
+    <thead>
+      <tr>
+        <th style="width: 150px;">Período</th>
+        <th style="width: 210px;">Papel / Instituição</th>
+        <th>Escopo & Tecnologias</th>
+      </tr>
+    </thead>
+    <tbody>
+      {careerData.map((item) => (
+        <tr>
+          <td style="color:var(--cyan); font-weight:bold;">{item.period}</td>
+          <td>
+            <strong>{item.role}</strong>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">{item.organization}</div>
+          </td>
+          <td style="color:var(--muted);">{item.description}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</section>
+
