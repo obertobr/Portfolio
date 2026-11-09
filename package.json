@@ -4,8 +4,10 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/sync-github.mjs",
     "build": "astro build",
     "preview": "astro preview",
+    "sync:github": "node scripts/sync-github.mjs",
     "astro": "astro"
   },
   "dependencies": {

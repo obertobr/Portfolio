@@ -1,20 +1,26 @@
 [
   {
-    "period": "2024 — PRESENTE",
-    "role": "Engenheiro de Software & Dados (Freelance)",
-    "organization": "Projetos Autônomos & Contratos",
-    "description": "Engenharia de pipelines distribuídos para extração de dados em larga escala. Desenvolvimento de crawlers headless resilientes com bypass de proteções complexas, normalização relacional e APIs assíncronas em TypeScript e Python."
+    "period": "AGO 2026 — PRESENTE",
+    "role": "Desenvolvedor Júnior",
+    "organization": "Avizo Health",
+    "description": "Desenvolvimento e evolução dos produtos digitais da empresa e site institucional, transformando protótipos em aplicações web funcionais, responsivas e interativas. Implementação de funcionalidades, aprimoramento de UX e testes/validações contínuas de qualidade."
   },
   {
-    "period": "2022 — 2024",
-    "role": "Tecnólogo em Análise e Desenvolvimento de Sistemas",
-    "organization": "FATEC São Paulo",
-    "description": "Formação superior com foco em engenharia de requisitos, modelagem relacional de banco de dados, computação distribuída e desenvolvimento de sistemas em C# e Java."
+    "period": "MAR 2026 — JUN 2026",
+    "role": "Desenvolvedor Full Stack",
+    "organization": "STS Tecnologia e Software",
+    "description": "Manutenção e evolução de sistemas ERP em Delphi e Lazarus, correção de bugs e criação de novas features. Desenvolvimento de aplicações em PHP, HTML, CSS, Bootstrap, MySQL e PostgreSQL. Criação do zero de integrador em Lazarus conectando o ERP local à nuvem para emissão de NF-e, com instalador automatizado e suporte remoto."
   },
   {
-    "period": "DESDE OS 10 ANOS",
-    "role": "Prática Deliberada & Mentoria Técnica Contínua",
-    "organization": "Formação Autodidata com Mentoria Paterna",
-    "description": "Mais de uma década contínua de programação iniciada aos 10 anos sob influência direta paterna. Desenvolvimento de algoritmos, automações, microsserviços e sistemas desktop/web em múltiplas linguagens."
+    "period": "NOV 2024 — FEV 2025",
+    "role": "Técnico de TI",
+    "organization": "Instituto Santo Expedito",
+    "description": "Suporte e manutenção de computadores, instalação e configuração de softwares, gerenciamento e monitoramento da infraestrutura de rede da instituição."
+  },
+  {
+    "period": "JUL 2024 — AGO 2024",
+    "role": "Estagiário",
+    "organization": "Aztec Energia",
+    "description": "Otimização de site corporativo com foco em SEO, responsividade e layout. Desenvolvimento de plugin personalizado em WordPress e apoio ao gerenciamento de fluxo de projetos via Microsoft Project."
   }
 ]

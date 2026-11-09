@@ -5,9 +5,9 @@ node_modules/
 dist/
 .astro/
 
-# Brainstorming Drafts & Exploration
-rascunhos/
-rascunhos_10_designs.html
+# Auto-Generated Data
+src/data/languages.json
+src/data/projects.json
 
 # Environment / Logs
 .env

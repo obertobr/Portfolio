@@ -9,17 +9,18 @@ import languages from '../data/languages.json';
 
   <div class="lang-bar-container" role="progressbar" aria-label="Distribuição de linguagens">
     {languages.map((lang) => (
-      <div 
+      <a 
+        href={`/projetos?lang=${encodeURIComponent(lang.name)}`}
         class="lang-bar-segment" 
         style={`width: ${lang.percentage}%; background-color: ${lang.color};`}
-        title={`${lang.name}: ${lang.percentage}% (${lang.projects} ${lang.projects === 1 ? 'projeto' : 'projetos'})`}
+        title={`Ver projetos em ${lang.name}: ${lang.percentage}% (${lang.projects} ${lang.projects === 1 ? 'projeto' : 'projetos'})`}
       />
     ))}
   </div>
 
   <div class="lang-grid">
     {languages.map((lang) => (
-      <div class="lang-card">
+      <a href={`/projetos?lang=${encodeURIComponent(lang.name)}`} class="lang-card" title={`Filtrar projetos por ${lang.name}`}>
         <div class="lang-card-header">
           <div class="lang-name-block">
             <span class="lang-dot" style={`background-color: ${lang.color};`} />
@@ -38,7 +39,7 @@ import languages from '../data/languages.json';
             style={`width: ${lang.percentage}%; background-color: ${lang.color};`}
           />
         </div>
-      </div>
+      </a>
     ))}
   </div>
 </section>
@@ -76,6 +77,15 @@ import languages from '../data/languages.json';
     border: 1px solid var(--border);
     background: #111113;
     padding: 9px 12px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .lang-card:hover {
+    border-color: var(--cyan);
+    background: #15151a;
   }
 
   .lang-card-header {

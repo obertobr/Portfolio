@@ -1,6 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import projectsData from '../data/projects.json';
+
+const sortedProjects = [...projectsData.all].sort((a, b) => {
+  const dateA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+  const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+  return dateB - dateA;
+});
 ---
 
 <Layout title="Repositórios & Projetos // Rafael E. Azzi Lopes (@obertobr)">
@@ -26,7 +32,12 @@ import projectsData from '../data/projects.json';
       <section>
         <div class="section-title">
           <span>Repositórios</span>
-          <span style="color:var(--cyan); font-size:11px; font-weight:normal;">TOTAL: {projectsData.all.length} PROJETOS</span>
+          <span id="repo-count" style="color:var(--cyan); font-size:11px; font-weight:normal;">TOTAL: {sortedProjects.length} PROJETOS</span>
+        </div>
+
+        <div id="filter-banner" class="filter-banner" style="display: none;">
+          <span>Filtrando por linguagem: <strong id="filter-badge" style="color:var(--cyan);"></strong></span>
+          <a href="/projetos" class="filter-clear">× Limpar Filtro</a>
         </div>
 
         <table class="spec-table">
@@ -39,10 +50,14 @@ import projectsData from '../data/projects.json';
             </tr>
           </thead>
           <tbody>
-            {projectsData.all.map((item) => (
-              <tr>
+            {sortedProjects.map((item) => (
+              <tr class="project-row" data-lang={item.language}>
                 <td><strong>{item.name}</strong></td>
-                <td style="color:var(--cyan);">{item.language}</td>
+                <td>
+                  <a href={`/projetos?lang=${encodeURIComponent(item.language)}`} class="lang-table-link" title={`Filtrar por ${item.language}`}>
+                    {item.language}
+                  </a>
+                </td>
                 <td style="color:var(--muted);">{item.description}</td>
                 <td style="text-align: right;">
                   <a href={item.url} target="_blank" rel="noopener noreferrer">[GitHub ↗]</a>
@@ -52,15 +67,97 @@ import projectsData from '../data/projects.json';
           </tbody>
         </table>
 
-
       </section>
 
     </main>
 
   </div>
+
+  <script>
+    function applyFilter() {
+      const params = new URLSearchParams(window.location.search);
+      const langParam = params.get('lang');
+      const banner = document.getElementById('filter-banner');
+      const badge = document.getElementById('filter-badge');
+      const countEl = document.getElementById('repo-count');
+      const rows = document.querySelectorAll<HTMLTableRowElement>('.project-row');
+
+      if (!langParam) {
+        if (banner) banner.style.display = 'none';
+        rows.forEach(r => r.style.display = '');
+        if (countEl) countEl.textContent = `TOTAL: ${rows.length} PROJETOS`;
+        return;
+      }
+
+      const targetLang = langParam.trim().toLowerCase();
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        const rowLang = (row.getAttribute('data-lang') || '').trim().toLowerCase();
+        let match = false;
+        if (targetLang === 'outros') {
+          match = !['javascript', 'typescript', 'rust', 'php', 'python'].includes(rowLang);
+        } else {
+          match = rowLang === targetLang;
+        }
+
+        if (match) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      if (banner && badge) {
+        badge.textContent = langParam;
+        banner.style.display = 'flex';
+      }
+
+      if (countEl) {
+        countEl.textContent = `${visibleCount} DE ${rows.length} PROJETOS`;
+      }
+    }
+
+    applyFilter();
+    window.addEventListener('popstate', applyFilter);
+  </script>
 </Layout>
 
 <style>
+  .filter-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111115;
+    border: 1px solid var(--cyan);
+    padding: 8px 12px;
+    font-size: 11px;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+
+  .filter-clear {
+    color: var(--cyan);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 11px;
+  }
+
+  .filter-clear:hover {
+    text-decoration: underline;
+    color: #fff;
+  }
+
+  .lang-table-link {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+
+  .lang-table-link:hover {
+    text-decoration: underline;
+  }
+
   .margin-sidebar {
     border-right: 1px solid var(--border);
     padding-right: 28px;
