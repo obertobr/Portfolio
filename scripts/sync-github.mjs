@@ -116,7 +116,6 @@ async function sync() {
     return;
   }
 
-  // Ordenar por editados mais recentemente (updated_at decrescente)
   repos.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 
   const pinnedNames = await getPinnedRepoNames();
@@ -164,32 +163,14 @@ async function sync() {
     }))
     .sort((a, b) => b.weight - a.weight);
 
-  const languagesList = [];
-  let otherWeight = 0;
-  let otherProjects = 0;
-
-  for (const item of rawList) {
-    if (item.percentage >= 0.8 && languagesList.length < 6) {
-      languagesList.push({
-        name: item.name,
-        percentage: Number(item.percentage.toFixed(1)),
-        color: item.color,
-        projects: item.projects
-      });
-    } else {
-      otherWeight += item.weight;
-      otherProjects += item.projects;
-    }
-  }
-
-  if (otherWeight > 0) {
-    languagesList.push({
-      name: 'Outros',
-      percentage: Number(((otherWeight / totalFilteredWeight) * 100).toFixed(1)),
-      color: '#64748b',
-      projects: otherProjects
-    });
-  }
+  const languagesList = rawList
+    .map((item) => ({
+      name: item.name,
+      percentage: Number(item.percentage.toFixed(1)),
+      color: item.color,
+      projects: item.projects
+    }))
+    .filter((l) => l.percentage > 0 || l.projects > 0);
 
   const allProjects = repos.map((repo) => ({
     name: repo.name,

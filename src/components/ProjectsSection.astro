@@ -2,7 +2,7 @@
 import projectsData from '../data/projects.json';
 ---
 
-<section>
+<section class="projects-section">
   <div class="section-title">
     <span>5.0 Projetos</span>
     <a href="/projetos" class="section-header-link">Todos projetos ↗</a>
@@ -147,26 +147,8 @@ import projectsData from '../data/projects.json';
   }
 
   @media print {
-    .section-header-link {
+    .projects-section {
       display: none !important;
-    }
-    .projects-grid {
-      grid-template-columns: 1fr;
-    }
-    .project-card {
-      background: #fff !important;
-      border: 1px solid #000 !important;
-    }
-    .project-title,
-    .project-idx,
-    .project-desc,
-    .project-github-link {
-      color: #000 !important;
-    }
-    .project-tag {
-      border: 1px solid #000 !important;
-      color: #000 !important;
-      background: #f0f0f0 !important;
     }
   }
 </style>

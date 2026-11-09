@@ -1,14 +1,40 @@
 ---
-import languages from '../data/languages.json';
+import rawLanguages from '../data/languages.json';
+
+const allLanguages = rawLanguages;
+
+const top5 = rawLanguages.slice(0, 5);
+const remaining = rawLanguages.slice(5);
+
+const printLanguages = [...top5];
+if (remaining.length > 0) {
+  const othersPct = Number(remaining.reduce((sum, l) => sum + l.percentage, 0).toFixed(1));
+  const othersProjects = remaining.reduce((sum, l) => sum + l.projects, 0);
+  printLanguages.push({
+    name: 'Outros',
+    percentage: othersPct,
+    color: '#eeeeee',
+    projects: othersProjects
+  });
+}
+
+const printGrayscaleShades = [
+  '#000000',
+  '#333333',
+  '#666666',
+  '#999999',
+  '#cccccc',
+  '#eeeeee'
+];
 ---
 
-<section>
+<section class="languages-section">
   <div class="section-title">
     <span>3.0 Linguagens</span>
   </div>
 
-  <div class="lang-bar-container" role="progressbar" aria-label="Distribuição de linguagens">
-    {languages.map((lang) => (
+  <div class="lang-bar-container screen-bar" role="progressbar" aria-label="Distribuição de linguagens">
+    {allLanguages.map((lang) => (
       <a 
         href={`/projetos?lang=${encodeURIComponent(lang.name)}`}
         class="lang-bar-segment" 
@@ -18,8 +44,18 @@ import languages from '../data/languages.json';
     ))}
   </div>
 
-  <div class="lang-grid">
-    {languages.map((lang) => (
+  <div class="lang-bar-container print-bar" role="progressbar" aria-label="Distribuição de linguagens no PDF">
+    {printLanguages.map((lang, idx) => (
+      <div 
+        class="lang-bar-segment" 
+        style={`width: ${lang.percentage}%; background-color: ${printGrayscaleShades[idx] || '#eeeeee'}; ${idx === printLanguages.length - 1 ? 'border-right: 1px solid #999;' : ''}`}
+        title={`${lang.name}: ${lang.percentage}%`}
+      />
+    ))}
+  </div>
+
+  <div class="lang-grid screen-grid">
+    {allLanguages.map((lang) => (
       <a href={`/projetos?lang=${encodeURIComponent(lang.name)}`} class="lang-card" title={`Filtrar projetos por ${lang.name}`}>
         <div class="lang-card-header">
           <div class="lang-name-block">
@@ -40,6 +76,34 @@ import languages from '../data/languages.json';
           />
         </div>
       </a>
+    ))}
+  </div>
+
+  <div class="lang-grid print-grid">
+    {printLanguages.map((lang, idx) => (
+      <div class="lang-card print-lang-card">
+        <div class="lang-card-header">
+          <div class="lang-name-block">
+            <span 
+              class="lang-dot" 
+              style={`background-color: ${printGrayscaleShades[idx] || '#eeeeee'}; ${idx === printLanguages.length - 1 ? 'border: 0.5px solid #888;' : ''}`} 
+            />
+            <span>{lang.name}</span>
+          </div>
+          <div class="lang-stats">
+            <span class="lang-count">{lang.projects} {lang.projects === 1 ? 'projeto' : 'projetos'}</span>
+            <span class="lang-sep">•</span>
+            <span class="lang-pct">{lang.percentage.toFixed(1)}%</span>
+          </div>
+        </div>
+
+        <div class="lang-progress-track">
+          <div 
+            class="lang-progress-fill" 
+            style={`width: ${lang.percentage}%; background-color: ${printGrayscaleShades[idx] || '#eeeeee'}; ${idx === printLanguages.length - 1 ? 'border: 0.5px solid #aaa;' : ''}`}
+          />
+        </div>
+      </div>
     ))}
   </div>
 </section>
@@ -145,6 +209,11 @@ import languages from '../data/languages.json';
     border-radius: 2px;
   }
 
+  .print-bar,
+  .print-grid {
+    display: none !important;
+  }
+
   @media (max-width: 640px) {
     .lang-grid {
       grid-template-columns: 1fr;
@@ -152,14 +221,92 @@ import languages from '../data/languages.json';
   }
 
   @media print {
-    .lang-card {
-      border: 1px solid #000 !important;
-      background: #fff !important;
+    .languages-section {
+      grid-column: 1 / -1 !important;
+      grid-row: 5 !important;
     }
-    .lang-name-block,
-    .lang-count,
-    .lang-pct {
+
+    .screen-bar,
+    .screen-grid {
+      display: none !important;
+    }
+
+    .print-bar {
+      display: flex !important;
+      height: 8px !important;
+      margin: 6px 0 8px 0 !important;
+      border: 1px solid #000 !important;
+      border-radius: 2px !important;
+      background: #f4f4f5 !important;
+      gap: 1px !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .print-bar .lang-bar-segment {
+      height: 100% !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .print-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 6px !important;
+      margin-bottom: 6px !important;
+    }
+
+    .print-lang-card {
+      border: 1px solid #777 !important;
+      background: #fff !important;
+      padding: 4px 8px !important;
+    }
+
+    .print-lang-card .lang-card-header {
+      margin-bottom: 3px !important;
+      font-size: 10px !important;
+    }
+
+    .print-lang-card .lang-name-block {
       color: #000 !important;
+      gap: 5px !important;
+      font-weight: bold !important;
+    }
+
+    .print-lang-card .lang-dot {
+      width: 6px !important;
+      height: 6px !important;
+      border-radius: 50% !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .print-lang-card .lang-stats {
+      font-size: 9px !important;
+      gap: 4px !important;
+    }
+
+    .print-lang-card .lang-count {
+      color: #444 !important;
+    }
+
+    .print-lang-card .lang-pct {
+      color: #000 !important;
+      font-weight: bold !important;
+    }
+
+    .print-lang-card .lang-progress-track {
+      height: 3px !important;
+      background: #e2e8f0 !important;
+      border: 0.5px solid #ccc !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .print-lang-card .lang-progress-fill {
+      height: 100% !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
   }
 </style>

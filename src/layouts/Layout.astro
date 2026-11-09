@@ -176,27 +176,132 @@ const {
     }
 
     @media print {
-      body {
+      @page {
+        size: A4 portrait;
+        margin: 8mm 12mm;
+      }
+
+      html, body {
         background: #fff !important;
         color: #000 !important;
+        font-size: 10.5px !important;
+        line-height: 1.38 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
+
       #life-canvas {
         display: none !important;
       }
+
       .document-layout {
         max-width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
+        display: grid !important;
+        grid-template-columns: 1fr 220px !important;
+        gap: 0 !important;
       }
+
+      .document-body {
+        display: contents !important;
+      }
+
+      .doc-header-block {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        border-bottom: none !important;
+        padding-bottom: 2px !important;
+        margin-bottom: 2px !important;
+        padding-right: 16px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+      }
+
+      h1 {
+        font-size: 20px !important;
+        font-weight: 800 !important;
+        color: #000 !important;
+        margin-bottom: 2px !important;
+        line-height: 1.15 !important;
+      }
+
+      .doc-subtitle {
+        font-size: 10px !important;
+        color: #333 !important;
+      }
+
+      .intro-section {
+        grid-column: 1 / -1 !important;
+        grid-row: 3 !important;
+      }
+
+      .intro-section p {
+        font-size: 10px !important;
+        line-height: 1.35 !important;
+        margin-bottom: 4px !important;
+        color: #111 !important;
+      }
+
+      .career-section {
+        grid-column: 1 / -1 !important;
+        grid-row: 4 !important;
+      }
+
+      .section-title {
+        font-size: 11px !important;
+        font-weight: bold !important;
+        color: #000 !important;
+        border-bottom: 1.5px solid #000 !important;
+        margin-top: 10px !important;
+        margin-bottom: 5px !important;
+        padding-bottom: 2px !important;
+        letter-spacing: 0.3px !important;
+      }
+
+      .spec-table {
+        margin: 4px 0 6px 0 !important;
+        font-size: 10px !important;
+        width: 100% !important;
+      }
+
+      .spec-table th {
+        border-bottom: 1px solid #000 !important;
+        color: #000 !important;
+        padding: 2px 0 !important;
+        font-size: 10px !important;
+      }
+
+      .spec-table td {
+        border-bottom: 0.5px solid #bbb !important;
+        padding: 4px 0 !important;
+        line-height: 1.32 !important;
+        color: #000 !important;
+      }
+
+      .spec-table td[style*="font-weight:bold"] {
+        color: #000 !important;
+        font-size: 9.5px !important;
+        width: 140px !important;
+      }
+
       .action-links-bar {
         display: none !important;
       }
+
       a {
         color: #000 !important;
-        text-decoration: underline !important;
+        text-decoration: none !important;
       }
+
       .doc-btn {
         display: none !important;
+      }
+
+      * {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
     }
   </style>

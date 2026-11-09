@@ -197,5 +197,11 @@ const sortedProjects = [...projectsData.all].sort((a, b) => {
       position: static;
     }
   }
+
+  @media print {
+    .filter-banner {
+      display: none !important;
+    }
+  }
 </style>
 

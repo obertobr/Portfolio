@@ -8,7 +8,7 @@ const { photoSrc = "/imgs/HD.png" } = Astro.props;
 
 <aside class="margin-sidebar">
   <div class="margin-sidebar-sticky">
-    <div>
+    <div class="margin-photo-container">
       <div class="margin-photo-box">
         <img src={photoSrc} alt="Rafael Eduardo Azzi Lopes" />
       </div>
@@ -17,19 +17,19 @@ const { photoSrc = "/imgs/HD.png" } = Astro.props;
       </div>
     </div>
 
-    <div class="margin-note">
+    <div class="margin-note margin-education">
       <strong>FORMAÇÃO:</strong>
       Análise e Desenvolvimento de Sistemas (FATEC SP, 2022–2024).
     </div>
 
-    <div class="margin-note">
+    <div class="margin-note margin-contacts">
       <strong>CONTATOS:</strong>
       real.azzi@gmail.com<br />
       (11) 94362-5903<br />
       Discord: @obertobr
     </div>
 
-    <div class="margin-note">
+    <div class="margin-note margin-networks">
       <strong>REDES:</strong>
       <div class="social-links-list">
         <a href="https://github.com/obertobr" target="_blank" rel="noopener noreferrer" class="social-link-item">
@@ -155,7 +155,58 @@ const { photoSrc = "/imgs/HD.png" } = Astro.props;
 
   @media print {
     .margin-sidebar {
+      display: contents !important;
+    }
+
+    .margin-sidebar-sticky {
+      display: contents !important;
+    }
+
+    .margin-photo-container,
+    .margin-networks {
+      display: none !important;
+    }
+
+    .margin-contacts {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
       border: none !important;
+      padding: 0 0 2px 16px !important;
+      margin: 0 !important;
+      font-size: 9.5px !important;
+      line-height: 1.35 !important;
+      color: #111 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+    }
+
+    .margin-contacts strong {
+      display: block !important;
+      margin-bottom: 2px !important;
+      color: #000 !important;
+      font-weight: bold !important;
+      letter-spacing: 0.5px !important;
+    }
+
+    .margin-education {
+      grid-column: 1 / -1 !important;
+      grid-row: 2 !important;
+      border: none !important;
+      border-bottom: 1px solid #000 !important;
+      padding: 6px 0 !important;
+      margin: 0 0 6px 0 !important;
+      font-size: 11.5px !important;
+      line-height: 1.35 !important;
+      color: #111 !important;
+    }
+
+    .margin-education strong {
+      color: #000 !important;
+      font-weight: bold !important;
+      display: inline !important;
+      margin-right: 6px !important;
+      font-size: 11.5px !important;
     }
   }
 </style>
