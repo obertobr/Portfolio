@@ -3,9 +3,35 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
 import { getProjects, getLanguages } from '../services/portfolioData.js';
-import careerFallback from '../data/career.json' with { type: 'json' };
+import careerData from '../data/career.json';
 
 const FONT_STACK = "Consolas, 'DejaVu Sans Mono', 'Liberation Mono', 'Courier New', monospace";
+
+let cachedPhotoBase64: string | null = null;
+
+async function loadPhotoBase64(): Promise<string> {
+  if (cachedPhotoBase64 !== null) return cachedPhotoBase64;
+
+  const candidatePaths = [
+    new URL('../../client/imgs/HD.png', import.meta.url),
+    new URL('../../public/imgs/HD.png', import.meta.url),
+    path.join(process.cwd(), 'dist', 'client', 'imgs', 'HD.png'),
+    path.join(process.cwd(), 'public', 'imgs', 'HD.png'),
+    path.join(process.cwd(), 'client', 'imgs', 'HD.png'),
+  ];
+
+  for (const candidate of candidatePaths) {
+    try {
+      const photoBuffer = await fs.readFile(candidate);
+      cachedPhotoBase64 = `data:image/png;base64,${photoBuffer.toString('base64')}`;
+      return cachedPhotoBase64;
+    } catch {
+      continue;
+    }
+  }
+
+  return '';
+}
 
 function escapeXml(unsafe: unknown): string {
   return String(unsafe ?? '')
@@ -106,30 +132,12 @@ function generateGameOfLife(width = 1200, height = 630, cellSize = 10): string {
 }
 
 export const GET: APIRoute = async () => {
-  const photoPath = path.join(process.cwd(), 'public', 'imgs', 'HD.png');
-  let photoBase64 = '';
-  try {
-    const photoBuffer = await fs.readFile(photoPath);
-    photoBase64 = `data:image/png;base64,${photoBuffer.toString('base64')}`;
-  } catch {
-    photoBase64 = '';
-  }
-
-  let currentJob = careerFallback[0] || {
+  const photoBase64 = await loadPhotoBase64();
+  const currentJob = careerData[0] || {
     period: 'AGO 2026 — PRESENTE',
     role: 'Desenvolvedor Júnior',
     organization: 'Avizo Health',
   };
-  try {
-    const careerPath = path.join(process.cwd(), 'src', 'data', 'career.json');
-    const careerRaw = await fs.readFile(careerPath, 'utf-8');
-    const careerList = JSON.parse(careerRaw);
-    if (careerList && careerList.length > 0) {
-      currentJob = careerList[0];
-    }
-  } catch {
-    currentJob = careerFallback[0];
-  }
 
   const projectsData = await getProjects();
   const languages = await getLanguages();
