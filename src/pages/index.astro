@@ -6,19 +6,79 @@ import CareerSection from '../components/CareerSection.astro';
 import LanguagesSection from '../components/LanguagesSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
+import { getSiteOrigin } from '../utils/siteOrigin';
+
+const siteOrigin = getSiteOrigin(Astro.request, Astro.url);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "primaryImageOfPage": `${siteOrigin}/og.png`,
+  "mainEntity": {
+    "@type": "Person",
+    "name": "Rafael Eduardo Azzi Lopes",
+    "alternateName": "obertobr",
+    "jobTitle": "Engenheiro de Software",
+    "url": siteOrigin,
+    "image": `${siteOrigin}/imgs/HD.png`,
+    "email": "mailto:real.azzi@gmail.com",
+    "telephone": "+55-11-94362-5903",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Bragança Paulista",
+      "addressRegion": "SP",
+      "addressCountry": "BR"
+    },
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "FATEC São Paulo — Análise e Desenvolvimento de Sistemas"
+    },
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Avizo Health"
+    },
+    "knowsAbout": [
+      "Python",
+      "TypeScript",
+      "JavaScript",
+      "React",
+      "Node.js",
+      "PHP",
+      "Rust",
+      "Delphi",
+      "Lazarus",
+      "PostgreSQL",
+      "MySQL",
+      "Docker",
+      "Engenharia de Dados",
+      "Web Scraping"
+    ],
+    "sameAs": [
+      "https://github.com/obertobr",
+      "https://www.linkedin.com/in/realopes/",
+      "https://x.com/obertobr",
+      "https://www.youtube.com/@obertobr"
+    ]
+  }
+};
 ---
 
-<Layout title="Rafael Eduardo Azzi Lopes (@obertobr) — Engenheiro de Software">
+<Layout
+  title="Rafael Eduardo Azzi Lopes (obertobr) — Engenheiro de Software & Dados"
+  description="Portfólio profissional de Rafael Eduardo Azzi Lopes (@obertobr), Engenheiro de Software Full Stack e Dados especializado em Python, TypeScript, React, Node.js, PHP, Delphi e bancos de dados relacionais."
+  ogType="profile"
+  structuredData={structuredData}
+>
   <div class="document-layout">
     <Marginalia photoSrc="/imgs/HD.png" />
 
     <main class="document-body">
       <Header />
 
-      <section class="intro-section">
-        <div class="section-title">
+      <section class="intro-section" aria-labelledby="sec-intro">
+        <h2 id="sec-intro" class="section-title">
           <span>1.0 Introdução</span>
-        </div>
+        </h2>
         <p>
           Olá! Sou Rafael, também conhecido como obertobr na internet, desenvolvedor de software apaixonado por tecnologia e pela criação de soluções.
         </p>

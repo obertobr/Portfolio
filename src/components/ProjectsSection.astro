@@ -4,11 +4,11 @@ import { getProjects } from '../services/portfolioData.js';
 const projectsData = await getProjects();
 ---
 
-<section class="projects-section">
-  <div class="section-title">
+<section class="projects-section" aria-labelledby="sec-projects">
+  <h2 id="sec-projects" class="section-title">
     <span>5.0 Projetos</span>
     <a href="/projetos" class="section-header-link">Todos projetos ↗</a>
-  </div>
+  </h2>
 
   <div class="projects-grid">
     {projectsData.featured.map((proj, idx) => (

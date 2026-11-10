@@ -10,7 +10,15 @@ const { photoSrc = "/imgs/HD.png" } = Astro.props;
   <div class="margin-sidebar-sticky">
     <div class="margin-photo-container">
       <div class="margin-photo-box">
-        <img src={photoSrc} alt="Rafael Eduardo Azzi Lopes" />
+        <img
+          src={photoSrc}
+          alt="Rafael Eduardo Azzi Lopes (obertobr) — Engenheiro de Software"
+          width="120"
+          height="120"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
       </div>
     </div>
 

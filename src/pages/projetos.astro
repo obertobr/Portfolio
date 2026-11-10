@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getProjects } from '../services/portfolioData.js';
+import { getSiteOrigin } from '../utils/siteOrigin';
 
 const projectsData = await getProjects();
 
@@ -9,9 +10,39 @@ const sortedProjects = [...projectsData.all].sort((a, b) => {
   const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
   return dateB - dateA;
 });
+
+const siteOrigin = getSiteOrigin(Astro.request, Astro.url);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Repositórios e Projetos — Rafael Eduardo Azzi Lopes (obertobr)",
+  "description": "Catálogo completo de repositórios, sistemas e projetos open source desenvolvidos por Rafael Eduardo Azzi Lopes (@obertobr).",
+  "url": `${siteOrigin}/projetos`,
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": sortedProjects.length,
+    "itemListElement": sortedProjects.slice(0, 25).map((repo, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "SoftwareSourceCode",
+        "name": repo.name,
+        "description": repo.description,
+        "programmingLanguage": repo.language,
+        "codeRepository": repo.url
+      }
+    }))
+  }
+};
 ---
 
-<Layout title="Repositórios & Projetos // Rafael E. Azzi Lopes (@obertobr)">
+<Layout
+  title="Repositórios & Projetos — Rafael Eduardo Azzi Lopes (obertobr)"
+  description="Catálogo completo de repositórios, sistemas e projetos open source desenvolvidos por Rafael Eduardo Azzi Lopes (@obertobr) em Python, TypeScript, Rust, PHP e JavaScript."
+  ogType="website"
+  structuredData={structuredData}
+>
   <div class="document-layout">
     <aside class="margin-sidebar">
       <div class="margin-sidebar-sticky">
@@ -31,11 +62,11 @@ const sortedProjects = [...projectsData.all].sort((a, b) => {
         <h1>Todos Projetos</h1>
       </header>
 
-      <section>
-        <div class="section-title">
+      <section aria-labelledby="sec-repos">
+        <h2 id="sec-repos" class="section-title">
           <span>Repositórios</span>
           <span id="repo-count" style="color:var(--cyan); font-size:11px; font-weight:normal;">TOTAL: {sortedProjects.length} PROJETOS</span>
-        </div>
+        </h2>
 
         <div id="filter-banner" class="filter-banner" style="display: none;">
           <span>Filtrando por linguagem: <strong id="filter-badge" style="color:var(--cyan);"></strong></span>
