@@ -1,6 +1,7 @@
 ---
-import rawLanguages from '../data/languages.json';
+import { getLanguages } from '../services/portfolioData.js';
 
+const rawLanguages = await getLanguages();
 const allLanguages = rawLanguages;
 
 const top5 = rawLanguages.slice(0, 5);

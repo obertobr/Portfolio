@@ -1,5 +1,7 @@
 ---
-import projectsData from '../data/projects.json';
+import { getProjects } from '../services/portfolioData.js';
+
+const projectsData = await getProjects();
 ---
 
 <section class="projects-section">
@@ -11,7 +13,7 @@ import projectsData from '../data/projects.json';
   <div class="projects-grid">
     {projectsData.featured.map((proj, idx) => (
       <article class="project-card">
-        <div>
+        <div class="project-card-content">
           <div class="project-card-header">
             <div class="project-title-wrap">
               <span class="project-idx">0{idx + 1}</span>
@@ -38,6 +40,26 @@ import projectsData from '../data/projects.json';
   </div>
 </section>
 
+<script>
+  function syncProjectCardHeights() {
+    const cards = document.querySelectorAll<HTMLElement>('.project-card');
+    if (!cards.length) return;
+    cards.forEach(c => c.style.height = 'auto');
+    let maxHeight = 0;
+    cards.forEach(c => {
+      if (c.offsetHeight > maxHeight) {
+        maxHeight = c.offsetHeight;
+      }
+    });
+    if (maxHeight > 0) {
+      cards.forEach(c => c.style.height = `${maxHeight}px`);
+    }
+  }
+
+  syncProjectCardHeights();
+  window.addEventListener('resize', syncProjectCardHeights);
+</script>
+
 <style>
   .section-header-link {
     font-size: 11px;
@@ -63,10 +85,12 @@ import projectsData from '../data/projects.json';
     background: #101013;
     border: 1px solid var(--border);
     border-top: 2px solid #27272a;
-    padding: 14px 16px;
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-height: 135px;
+    box-sizing: border-box;
     transition: border-color 0.2s ease, background 0.2s ease;
   }
 
@@ -77,7 +101,7 @@ import projectsData from '../data/projects.json';
   }
 
   .project-card-header {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .project-title-wrap {
@@ -104,7 +128,7 @@ import projectsData from '../data/projects.json';
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .project-tag {
@@ -118,14 +142,14 @@ import projectsData from '../data/projects.json';
   .project-desc {
     font-size: 12px;
     color: var(--muted);
-    line-height: 1.55;
-    margin-bottom: 14px;
+    line-height: 1.5;
+    margin-bottom: 6px;
   }
 
   .project-footer {
-    padding-top: 8px;
     display: flex;
     justify-content: flex-end;
+    margin-top: auto;
   }
 
   .project-github-link {

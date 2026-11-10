@@ -6,11 +6,13 @@
     "dev": "astro dev",
     "prebuild": "node scripts/sync-github.mjs",
     "build": "astro build",
-    "preview": "astro preview",
+    "start": "node dist/server/entry.mjs",
+    "preview": "node dist/server/entry.mjs",
     "sync:github": "node scripts/sync-github.mjs",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.5",
     "astro": "^5.4.2"
   },
   "devDependencies": {
@@ -18,4 +20,3 @@
     "typescript": "^5.8.2"
   }
 }
-
