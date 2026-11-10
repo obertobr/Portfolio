@@ -117,19 +117,6 @@ const { photoSrc = "/imgs/HD.png" } = Astro.props;
 </aside>
 
 <style>
-  .margin-sidebar {
-    border-right: 1px solid var(--border);
-    padding-right: 28px;
-  }
-
-  .margin-sidebar-sticky {
-    position: sticky;
-    top: 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
   .margin-photo-box {
     width: 120px;
     height: 120px;
@@ -144,27 +131,6 @@ const { photoSrc = "/imgs/HD.png" } = Astro.props;
     object-fit: cover;
     display: block;
     filter: contrast(120%) grayscale(40%);
-  }
-
-  .margin-caption {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 6px;
-    line-height: 1.4;
-  }
-
-  .margin-note {
-    font-size: 11px;
-    color: var(--muted);
-    border-left: 2px solid var(--cyan);
-    padding-left: 10px;
-    line-height: 1.5;
-  }
-
-  .margin-note strong {
-    color: var(--cyan);
-    display: block;
-    margin-bottom: 2px;
   }
 
   .social-links-list {
@@ -193,19 +159,6 @@ const { photoSrc = "/imgs/HD.png" } = Astro.props;
     width: 13px;
     height: 13px;
     flex-shrink: 0;
-  }
-
-  @media (max-width: 820px) {
-    .margin-sidebar {
-      border-right: none;
-      border-bottom: 1px solid var(--border);
-      padding-right: 0;
-      padding-bottom: 24px;
-    }
-
-    .margin-sidebar-sticky {
-      position: static;
-    }
   }
 
   @media print {
