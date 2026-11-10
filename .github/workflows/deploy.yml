@@ -27,7 +27,7 @@ jobs:
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
           ARGS: "-rlgoDzvc -i"
-          SOURCE: "dist/ public/ src/data/ package.json package-lock.json"
+          SOURCE: "dist ecosystem.config.cjs package.json package-lock.json"
           REMOTE_HOST: ${{ secrets.HOST }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           REMOTE_PORT: ${{ secrets.PORT || 22 }}
@@ -43,6 +43,8 @@ jobs:
           port: ${{ secrets.PORT || 22 }}
           script: |
             cd ${{ secrets.TARGET_DIR }}
+            [ -d "server" ] && [ ! -d "src" ] && rm -rf server client
             npm ci --omit=dev
-            PORT=4321 pm2 restart portfolio || PORT=4321 pm2 start dist/server/entry.mjs --name portfolio
+            pm2 restart portfolio --update-env || pm2 start ecosystem.config.cjs
+            pm2 save
 
