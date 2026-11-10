@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+main, aside, section, article, header, footer, nav {
+  display: block;
+}
+
 :root {
   --bg: #141416;
   --bg-card: #101013;
@@ -49,8 +53,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
 }
@@ -73,15 +77,47 @@ p {
   max-width: 1040px;
   margin: 40px auto 80px auto;
   padding: 0 30px;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 50px;
   position: relative;
   z-index: 1;
 }
 
+.document-layout::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.margin-sidebar {
+  float: left;
+  width: 260px;
+  border-right: 1px solid var(--border);
+  padding-right: 28px;
+}
+
 .document-body {
+  margin-left: 310px;
   max-width: 680px;
+}
+
+@supports (display: grid) {
+  .document-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 50px;
+  }
+
+  .document-layout::after {
+    display: none;
+  }
+
+  .margin-sidebar {
+    float: none;
+    width: auto;
+  }
+
+  .document-body {
+    margin-left: 0;
+  }
 }
 
 .doc-header-block {
@@ -177,11 +213,6 @@ h1 {
   text-decoration: none;
 }
 
-.margin-sidebar {
-  border-right: 1px solid var(--border);
-  padding-right: 28px;
-}
-
 .margin-sidebar-sticky {
   position: sticky;
   top: 40px;
@@ -196,6 +227,13 @@ h1 {
   border-left: 2px solid var(--cyan);
   padding-left: 10px;
   line-height: var(--leading-normal);
+  margin-bottom: 20px;
+}
+
+@supports (gap: 24px) {
+  .margin-note {
+    margin-bottom: 0;
+  }
 }
 
 .margin-note strong {
@@ -213,10 +251,17 @@ h1 {
   }
 
   .margin-sidebar {
+    float: none;
+    width: 100%;
     border-right: none;
     border-bottom: 1px solid var(--border);
     padding-right: 0;
     padding-bottom: 24px;
+    margin-bottom: 24px;
+  }
+
+  .document-body {
+    margin-left: 0;
   }
 
   .margin-sidebar-sticky {
@@ -254,6 +299,7 @@ h1 {
 
   .document-body {
     display: contents !important;
+    margin-left: 0 !important;
   }
 
   .doc-header-block {
@@ -358,4 +404,3 @@ h1 {
     break-inside: avoid !important;
   }
 }
-

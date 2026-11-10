@@ -11,6 +11,23 @@ const sortedProjects = [...projectsData.all].sort((a, b) => {
   return dateB - dateA;
 });
 
+const rawLangFilter = Astro.url.searchParams.get('lang');
+const targetLang = rawLangFilter ? rawLangFilter.trim().toLowerCase() : '';
+
+function matchesLanguageFilter(language: string): boolean {
+  if (!targetLang) return true;
+  const normalized = (language || '').trim().toLowerCase();
+  if (targetLang === 'outros') {
+    return !['javascript', 'typescript', 'rust', 'php', 'python'].includes(normalized);
+  }
+  return normalized === targetLang;
+}
+
+const visibleCount = sortedProjects.filter((p) => matchesLanguageFilter(p.language)).length;
+const countLabel = targetLang
+  ? `${visibleCount} DE ${sortedProjects.length} PROJETOS`
+  : `TOTAL: ${sortedProjects.length} PROJETOS`;
+
 const siteOrigin = getSiteOrigin(Astro.request, Astro.url);
 
 const structuredData = {
@@ -65,11 +82,11 @@ const structuredData = {
       <section aria-labelledby="sec-repos">
         <h2 id="sec-repos" class="section-title">
           <span>Repositórios</span>
-          <span id="repo-count" style="color:var(--cyan); font-size:11px; font-weight:normal;">TOTAL: {sortedProjects.length} PROJETOS</span>
+          <span id="repo-count" style="color:var(--cyan); font-size:11px; font-weight:normal;">{countLabel}</span>
         </h2>
 
-        <div id="filter-banner" class="filter-banner" style="display: none;">
-          <span>Filtrando por linguagem: <strong id="filter-badge" style="color:var(--cyan);"></strong></span>
+        <div id="filter-banner" class="filter-banner" style={targetLang ? 'display: flex;' : 'display: none;'}>
+          <span>Filtrando por linguagem: <strong id="filter-badge" style="color:var(--cyan);">{rawLangFilter || ''}</strong></span>
           <a href="/projetos" class="filter-clear">× Limpar Filtro</a>
         </div>
 
@@ -83,20 +100,23 @@ const structuredData = {
             </tr>
           </thead>
           <tbody>
-            {sortedProjects.map((item) => (
-              <tr class="project-row" data-lang={item.language}>
-                <td class="proj-cell-name"><strong>{item.name}</strong></td>
-                <td class="proj-cell-lang">
-                  <a href={`/projetos?lang=${encodeURIComponent(item.language)}`} class="lang-table-link" title={`Filtrar por ${item.language}`}>
-                    {item.language}
-                  </a>
-                </td>
-                <td class="proj-cell-desc">{item.description}</td>
-                <td class="proj-cell-link">
-                  <a href={item.url} target="_blank" rel="noopener noreferrer">[GitHub ↗]</a>
-                </td>
-              </tr>
-            ))}
+            {sortedProjects.map((item) => {
+              const isVisible = matchesLanguageFilter(item.language);
+              return (
+                <tr class="project-row" data-lang={item.language} style={isVisible ? '' : 'display: none;'}>
+                  <td class="proj-cell-name"><strong>{item.name}</strong></td>
+                  <td class="proj-cell-lang">
+                    <a href={`/projetos?lang=${encodeURIComponent(item.language)}`} class="lang-table-link" title={`Filtrar por ${item.language}`}>
+                      {item.language}
+                    </a>
+                  </td>
+                  <td class="proj-cell-desc">{item.description}</td>
+                  <td class="proj-cell-link">
+                    <a href={item.url} target="_blank" rel="noopener noreferrer">[GitHub ↗]</a>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
@@ -106,54 +126,63 @@ const structuredData = {
 
   </div>
 
-  <script>
-    function applyFilter() {
-      const params = new URLSearchParams(window.location.search);
-      const langParam = params.get('lang');
-      const banner = document.getElementById('filter-banner');
-      const badge = document.getElementById('filter-badge');
-      const countEl = document.getElementById('repo-count');
-      const rows = document.querySelectorAll<HTMLTableRowElement>('.project-row');
+  <script is:inline>
+    (function () {
+      if (!document.querySelectorAll || typeof URLSearchParams === 'undefined') return;
 
-      if (!langParam) {
-        if (banner) banner.style.display = 'none';
-        rows.forEach(r => r.style.display = '');
-        if (countEl) countEl.textContent = `TOTAL: ${rows.length} PROJETOS`;
-        return;
-      }
+      function applyFilter() {
+        var params = new URLSearchParams(window.location.search);
+        var langParam = params.get('lang');
+        var banner = document.getElementById('filter-banner');
+        var badge = document.getElementById('filter-badge');
+        var countEl = document.getElementById('repo-count');
+        var rows = document.querySelectorAll('.project-row');
 
-      const targetLang = langParam.trim().toLowerCase();
-      let visibleCount = 0;
-
-      rows.forEach(row => {
-        const rowLang = (row.getAttribute('data-lang') || '').trim().toLowerCase();
-        let match = false;
-        if (targetLang === 'outros') {
-          match = !['javascript', 'typescript', 'rust', 'php', 'python'].includes(rowLang);
-        } else {
-          match = rowLang === targetLang;
+        if (!langParam) {
+          if (banner) banner.style.display = 'none';
+          for (var i = 0; i < rows.length; i++) {
+            rows[i].style.display = '';
+          }
+          if (countEl) countEl.textContent = 'TOTAL: ' + rows.length + ' PROJETOS';
+          return;
         }
 
-        if (match) {
-          row.style.display = '';
-          visibleCount++;
-        } else {
-          row.style.display = 'none';
+        var targetLang = langParam.replace(/^\s+|\s+$/g, '').toLowerCase();
+        var visibleCount = 0;
+        var primaryLangs = ['javascript', 'typescript', 'rust', 'php', 'python'];
+
+        for (var j = 0; j < rows.length; j++) {
+          var row = rows[j];
+          var rowLang = (row.getAttribute('data-lang') || '').replace(/^\s+|\s+$/g, '').toLowerCase();
+          var match = false;
+          if (targetLang === 'outros') {
+            match = primaryLangs.indexOf(rowLang) === -1;
+          } else {
+            match = rowLang === targetLang;
+          }
+
+          if (match) {
+            row.style.display = '';
+            visibleCount++;
+          } else {
+            row.style.display = 'none';
+          }
         }
-      });
 
-      if (banner && badge) {
-        badge.textContent = langParam;
-        banner.style.display = 'flex';
+        if (banner && badge) {
+          badge.textContent = langParam;
+          banner.style.display = 'flex';
+        }
+
+        if (countEl) {
+          countEl.textContent = visibleCount + ' DE ' + rows.length + ' PROJETOS';
+        }
       }
 
-      if (countEl) {
-        countEl.textContent = `${visibleCount} DE ${rows.length} PROJETOS`;
+      if (window.addEventListener) {
+        window.addEventListener('popstate', applyFilter);
       }
-    }
-
-    applyFilter();
-    window.addEventListener('popstate', applyFilter);
+    })();
   </script>
 </Layout>
 
@@ -175,6 +204,13 @@ const structuredData = {
     text-decoration: none;
     font-weight: bold;
     font-size: 11px;
+    float: right;
+  }
+
+  @supports (display: flex) {
+    .filter-clear {
+      float: none;
+    }
   }
 
   .filter-clear:hover {
@@ -253,4 +289,3 @@ const structuredData = {
     }
   }
 </style>
-

@@ -66,176 +66,180 @@ const imageUrl = ogImage.startsWith('http') ? ogImage : `${siteOrigin}${ogImage}
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   )}
 </head>
-<body>
+<body bgcolor="#141416" text="#e2e8f0" link="#38bdf8" vlink="#38bdf8">
   <canvas id="life-canvas" aria-hidden="true"></canvas>
   <slot />
 
-  <script>
-    const canvas = document.getElementById('life-canvas') as HTMLCanvasElement | null;
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const cellSize = 10;
-        const stepInterval = 130;
-        let cols = 0;
-        let rows = 0;
-        let current = new Uint8Array(0);
-        let next = new Uint8Array(0);
-        let tick = 0;
-        let lastTime = 0;
+  <script is:inline>
+    (function () {
+      var canvas = document.getElementById('life-canvas');
+      if (!canvas || !canvas.getContext || !window.requestAnimationFrame || typeof Uint8Array === 'undefined') {
+        return;
+      }
+      var ctx = canvas.getContext('2d');
+      if (!ctx) return;
 
-        function initGrid() {
-          if (!canvas) return;
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
-          cols = Math.ceil(canvas.width / cellSize);
-          rows = Math.ceil(canvas.height / cellSize);
-          const total = cols * rows;
-          current = new Uint8Array(total);
-          next = new Uint8Array(total);
+      var cellSize = 10;
+      var stepInterval = 130;
+      var cols = 0;
+      var rows = 0;
+      var current = new Uint8Array(0);
+      var next = new Uint8Array(0);
+      var tick = 0;
+      var lastTime = 0;
 
-          for (let i = 0; i < total; i++) {
-            if (Math.random() < 0.12) {
-              current[i] = 1;
-            }
+      function initGrid() {
+        canvas.width = window.innerWidth || document.documentElement.clientWidth || 1024;
+        canvas.height = window.innerHeight || document.documentElement.clientHeight || 768;
+        cols = Math.ceil(canvas.width / cellSize);
+        rows = Math.ceil(canvas.height / cellSize);
+        var total = cols * rows;
+        current = new Uint8Array(total);
+        next = new Uint8Array(total);
+
+        for (var i = 0; i < total; i++) {
+          if (Math.random() < 0.12) {
+            current[i] = 1;
           }
         }
+      }
 
-        function spawnGlider(x: number, y: number) {
-          const pattern = [
-            [0, 1], [1, 2], [2, 0], [2, 1], [2, 2]
-          ];
-          for (const [dx, dy] of pattern) {
-            const c = (x + dx + cols) % cols;
-            const r = (y + dy + rows) % rows;
-            current[r * cols + c] = 1;
-          }
+      function spawnGlider(x, y) {
+        var pattern = [
+          [0, 1], [1, 2], [2, 0], [2, 1], [2, 2]
+        ];
+        for (var i = 0; i < pattern.length; i++) {
+          var dx = pattern[i][0];
+          var dy = pattern[i][1];
+          var c = (x + dx + cols) % cols;
+          var r = (y + dy + rows) % rows;
+          current[r * cols + c] = 1;
         }
+      }
 
+      if (window.addEventListener) {
         window.addEventListener('resize', initGrid);
-        initGrid();
-
-        window.addEventListener('click', (e) => {
-          const c = Math.floor(e.clientX / cellSize);
-          const r = Math.floor(e.clientY / cellSize);
-          for (let dr = -1; dr <= 1; dr++) {
-            for (let dc = -1; dc <= 1; dc++) {
+        window.addEventListener('click', function (e) {
+          var c = Math.floor(e.clientX / cellSize);
+          var r = Math.floor(e.clientY / cellSize);
+          for (var dr = -1; dr <= 1; dr++) {
+            for (var dc = -1; dc <= 1; dc++) {
               if (Math.random() < 0.75) {
-                const nc = (c + dc + cols) % cols;
-                const nr = (r + dr + rows) % rows;
+                var nc = (c + dc + cols) % cols;
+                var nr = (r + dr + rows) % rows;
                 current[nr * cols + nc] = 1;
               }
             }
           }
         });
-
-        function step() {
-          let aliveCount = 0;
-          for (let r = 0; r < rows; r++) {
-            const top = (r === 0 ? rows - 1 : r - 1) * cols;
-            const mid = r * cols;
-            const bot = (r === rows - 1 ? 0 : r + 1) * cols;
-
-            for (let c = 0; c < cols; c++) {
-              const left = c === 0 ? cols - 1 : c - 1;
-              const right = c === cols - 1 ? 0 : c + 1;
-
-              const count = (
-                (current[top + left] > 0 ? 1 : 0) +
-                (current[top + c] > 0 ? 1 : 0) +
-                (current[top + right] > 0 ? 1 : 0) +
-                (current[mid + left] > 0 ? 1 : 0) +
-                (current[mid + right] > 0 ? 1 : 0) +
-                (current[bot + left] > 0 ? 1 : 0) +
-                (current[bot + c] > 0 ? 1 : 0) +
-                (current[bot + right] > 0 ? 1 : 0)
-              );
-
-              const idx = mid + c;
-              const state = current[idx];
-
-              if (state > 0) {
-                if (count === 2 || count === 3) {
-                  next[idx] = Math.min(state + 1, 10);
-                  aliveCount++;
-                } else {
-                  next[idx] = 0;
-                }
-              } else {
-                if (count === 3) {
-                  next[idx] = 1;
-                  aliveCount++;
-                } else {
-                  next[idx] = 0;
-                }
-              }
-            }
-          }
-
-          const temp = current;
-          current = next;
-          next = temp;
-
-          if (tick % 60 === 0 || aliveCount < 25) {
-            const rx = Math.floor(Math.random() * cols);
-            const ry = Math.floor(Math.random() * rows);
-            spawnGlider(rx, ry);
-          }
-        }
-
-        function draw() {
-          if (!canvas || !ctx) return;
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-
-          for (let r = 0; r < rows; r++) {
-            const rowOffset = r * cols;
-            const y = r * cellSize;
-            const topRow = (r === 0 ? rows - 1 : r - 1) * cols;
-            const botRow = (r === rows - 1 ? 0 : r + 1) * cols;
-
-            for (let c = 0; c < cols; c++) {
-              if (current[rowOffset + c] > 0) {
-                const x = c * cellSize;
-                const left = c === 0 ? cols - 1 : c - 1;
-                const right = c === cols - 1 ? 0 : c + 1;
-
-                if (current[topRow + c] === 0) {
-                  ctx.moveTo(x, y);
-                  ctx.lineTo(x + cellSize, y);
-                }
-                if (current[botRow + c] === 0) {
-                  ctx.moveTo(x, y + cellSize);
-                  ctx.lineTo(x + cellSize, y + cellSize);
-                }
-                if (current[rowOffset + left] === 0) {
-                  ctx.moveTo(x, y);
-                  ctx.lineTo(x, y + cellSize);
-                }
-                if (current[rowOffset + right] === 0) {
-                  ctx.moveTo(x + cellSize, y);
-                  ctx.lineTo(x + cellSize, y + cellSize);
-                }
-              }
-            }
-          }
-          ctx.stroke();
-        }
-
-        function loop(timestamp: number) {
-          requestAnimationFrame(loop);
-          if (timestamp - lastTime < stepInterval) return;
-          lastTime = timestamp;
-          tick++;
-          step();
-          draw();
-        }
-
-        requestAnimationFrame(loop);
       }
-    }
+      initGrid();
+
+      function step() {
+        var aliveCount = 0;
+        for (var r = 0; r < rows; r++) {
+          var top = (r === 0 ? rows - 1 : r - 1) * cols;
+          var mid = r * cols;
+          var bot = (r === rows - 1 ? 0 : r + 1) * cols;
+
+          for (var c = 0; c < cols; c++) {
+            var left = c === 0 ? cols - 1 : c - 1;
+            var right = c === cols - 1 ? 0 : c + 1;
+
+            var count = (
+              (current[top + left] > 0 ? 1 : 0) +
+              (current[top + c] > 0 ? 1 : 0) +
+              (current[top + right] > 0 ? 1 : 0) +
+              (current[mid + left] > 0 ? 1 : 0) +
+              (current[mid + right] > 0 ? 1 : 0) +
+              (current[bot + left] > 0 ? 1 : 0) +
+              (current[bot + c] > 0 ? 1 : 0) +
+              (current[bot + right] > 0 ? 1 : 0)
+            );
+
+            var idx = mid + c;
+            var state = current[idx];
+
+            if (state > 0) {
+              if (count === 2 || count === 3) {
+                next[idx] = Math.min(state + 1, 10);
+                aliveCount++;
+              } else {
+                next[idx] = 0;
+              }
+            } else {
+              if (count === 3) {
+                next[idx] = 1;
+                aliveCount++;
+              } else {
+                next[idx] = 0;
+              }
+            }
+          }
+        }
+
+        var temp = current;
+        current = next;
+        next = temp;
+
+        if (tick % 60 === 0 || aliveCount < 25) {
+          var rx = Math.floor(Math.random() * cols);
+          var ry = Math.floor(Math.random() * rows);
+          spawnGlider(rx, ry);
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+
+        for (var r = 0; r < rows; r++) {
+          var rowOffset = r * cols;
+          var y = r * cellSize;
+          var topRow = (r === 0 ? rows - 1 : r - 1) * cols;
+          var botRow = (r === rows - 1 ? 0 : r + 1) * cols;
+
+          for (var c = 0; c < cols; c++) {
+            if (current[rowOffset + c] > 0) {
+              var x = c * cellSize;
+              var left = c === 0 ? cols - 1 : c - 1;
+              var right = c === cols - 1 ? 0 : c + 1;
+
+              if (current[topRow + c] === 0) {
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + cellSize, y);
+              }
+              if (current[botRow + c] === 0) {
+                ctx.moveTo(x, y + cellSize);
+                ctx.lineTo(x + cellSize, y + cellSize);
+              }
+              if (current[rowOffset + left] === 0) {
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, y + cellSize);
+              }
+              if (current[rowOffset + right] === 0) {
+                ctx.moveTo(x + cellSize, y);
+                ctx.lineTo(x + cellSize, y + cellSize);
+              }
+            }
+          }
+        }
+        ctx.stroke();
+      }
+
+      function loop(timestamp) {
+        window.requestAnimationFrame(loop);
+        if (timestamp - lastTime < stepInterval) return;
+        lastTime = timestamp;
+        tick++;
+        step();
+        draw();
+      }
+
+      window.requestAnimationFrame(loop);
+    })();
   </script>
 </body>
 </html>

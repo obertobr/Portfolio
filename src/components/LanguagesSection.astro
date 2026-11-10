@@ -120,9 +120,12 @@ const printGrayscaleShades = [
     border: 1px solid var(--border);
     margin: 16px 0 20px 0;
     gap: 2px;
+    font-size: 0;
   }
 
   .lang-bar-segment {
+    display: inline-block;
+    vertical-align: top;
     height: 100%;
     transition: opacity 0.2s ease;
   }
@@ -132,9 +135,6 @@ const printGrayscaleShades = [
   }
 
   .lang-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
     margin-bottom: 24px;
   }
 
@@ -144,8 +144,26 @@ const printGrayscaleShades = [
     padding: 9px 12px;
     text-decoration: none;
     color: inherit;
-    display: block;
+    display: inline-block;
+    vertical-align: top;
+    width: 48%;
+    margin-right: 1.5%;
+    margin-bottom: 10px;
     transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  @supports (display: grid) {
+    .lang-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .lang-card {
+      display: block;
+      width: auto;
+      margin: 0;
+    }
   }
 
   .lang-card:hover {
@@ -162,7 +180,7 @@ const printGrayscaleShades = [
   }
 
   .lang-name-block {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 7px;
     font-weight: bold;
@@ -174,14 +192,28 @@ const printGrayscaleShades = [
     height: 7px;
     border-radius: 50%;
     display: inline-block;
+    margin-right: 5px;
+  }
+
+  @supports (gap: 7px) {
+    .lang-dot {
+      margin-right: 0;
+    }
   }
 
   .lang-stats {
-    display: flex;
+    float: right;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     font-size: 11px;
     font-family: var(--font-mono);
+  }
+
+  @supports (display: flex) {
+    .lang-stats {
+      float: none;
+    }
   }
 
   .lang-count {
@@ -218,6 +250,11 @@ const printGrayscaleShades = [
   @media (max-width: 640px) {
     .lang-grid {
       grid-template-columns: 1fr;
+    }
+
+    .lang-card {
+      width: 100%;
+      margin-right: 0;
     }
   }
 
