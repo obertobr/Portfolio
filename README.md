@@ -24,13 +24,20 @@ O site foi pensado e estruturado para funcionar no maior número possível de na
 
 ---
 
-## SEO e Open Graph Dinâmico (`/og.png`)
+## SEO
 
-- **SEO**: Estruturado com meta tags essenciais, tags canônicas que identificam o host correto mesmo atrás de proxy reverso, além de geração automática de `sitemap.xml` e `robots.txt`.
-- **Banner Dinâmico para Redes Sociais**: Ao compartilhar o link do site no Discord, WhatsApp, Twitter ou LinkedIn, o endpoint `/og.png` gera na hora uma imagem personalizada (1200x630) contendo:
-  - Fundo com o padrão do Jogo da Vida (Conway's Game of Life) com linhas contínuas.
-  - Dados atualizados de carreira (anos de experiência, projetos públicos e linguagens).
-  - Cards com as principais linguagens e suas porcentagens reais extraídas dos repositórios.
+Estruturado com meta tags essenciais, tags canônicas que identificam o host correto mesmo atrás de proxy reverso, além de geração dinâmica de `sitemap.xml` e `robots.txt`.
+
+---
+
+## Open Graph Dinâmico (`/og.png`)
+
+Ao compartilhar o link do site no Discord, WhatsApp, Twitter ou LinkedIn, o endpoint `/og.png` gera na hora uma imagem personalizada (1200x630) contendo:
+- Fundo com o padrão do Jogo da Vida (Conway's Game of Life) com linhas contínuas.
+- Dados atualizados de carreira (anos de experiência, projetos públicos e linguagens).
+- Cards com as principais linguagens e suas porcentagens reais extraídas dos repositórios.
+
+![Preview Open Graph Dinâmico](https://portfolio.obertobr.space/og.png)
 
 ---
 
